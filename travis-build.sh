@@ -76,6 +76,9 @@ docker images
 
 # push latest
 docker tag laradock_${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
+
+docker images
+
 docker push ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}
 
 if [[ ${BUILD_VERSION} != "latest" ]]; then
