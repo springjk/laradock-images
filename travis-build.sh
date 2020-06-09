@@ -3,6 +3,9 @@
 #### halt script on error
 set -xe
 
+git clone -b v10.0 https://github.com/laradock/laradock.git
+cd laradock
+
 echo '##### Print docker version'
 docker --version
 
@@ -36,6 +39,7 @@ if [ -n "${PHP_VERSION}" ]; then
 
 
     ### 自定义部分 ###
+
     # 开启 中国源-阿里云
     sed -i -- 's/CHANGE_SOURCE=false/CHANGE_SOURCE=true/g' .env
 
@@ -49,14 +53,34 @@ if [ -n "${PHP_VERSION}" ]; then
     sed -i -- 's/PHP_WORKER_INSTALL_SWOOLE=false/PHP_WORKER_INSTALL_SWOOLE=true/g' .env
     sed -i -- 's/WORKSPACE_INSTALL_SWOOLE=false/WORKSPACE_INSTALL_SWOOLE=true/g' .env
 
-    # 锁定 mysql 版本为 mysql 8.0
-    sed -i -- 's/MYSQL_VERSION=latest/MYSQL_VERSION=8.0/g' .env
-    #################
+    # 添加 php ini 配置文件至 php-fpm 镜像内
 
-    cat .env
-    docker-compose build ${BUILD_SERVICE}
-    docker images
+    search='USER root';
+    insert='COPY ./php-fpm/php${LARADOCK_PHP_VERSION}.ini /usr/local/etc/php/php.ini';
+    sed  -i "/$search/i$insert" ./php-fpm/Dockerfile;
+
+
 fi
+
+
+# 锁定 mysql 版本为 mysql 8.0
+sed -i -- 's/MYSQL_VERSION=latest/MYSQL_VERSION=8.0/g' .env
+#################
+
+cat .env
+docker-compose build ${BUILD_SERVICE}
+docker images
+
+# push latest
+docker tag laradock_${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
+docker push ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}
+
+if [[ ${BUILD_VERSION} != "latest" ]]; then
+    # push build version
+    docker tag ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:${BUILD_VERSION}
+    docker push ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}
+fi
+
 
 #### Generate the Laradock Documentation site using Hugo
 if [ -n "${HUGO_VERSION}" ]; then
