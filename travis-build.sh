@@ -22,6 +22,9 @@ if [ -n "${PHP_VERSION}" ]; then
         # Aerospike C Client SDK 4.0.7, Debian 9.6 is not supported
         # https://github.com/aerospike/aerospike-client-php5/issues/145
         sed -i -- 's/PHP_FPM_INSTALL_AEROSPIKE=true/PHP_FPM_INSTALL_AEROSPIKE=false/g' .env
+
+        sed -i -- 's/WORKSPACE_INSTALL_AST=true/WORKSPACE_INSTALL_AST=false/g' .env
+
     fi
     if [ "${PHP_VERSION}" == "7.3" ]; then
         # V8JS extension does not yet support PHP 7.3.
