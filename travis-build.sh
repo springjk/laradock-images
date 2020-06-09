@@ -12,9 +12,13 @@ docker --version
 echo '##### Print environment'
 env | sort
 
+BUILD_VERSION=latest
+cp env-example .env
+
 #### Build the Docker Images
 if [ -n "${PHP_VERSION}" ]; then
-    cp env-example .env
+    BUILD_VERSION=${PHP_VERSION}
+
     sed -i -- "s/PHP_VERSION=.*/PHP_VERSION=${PHP_VERSION}/g" .env
     # sed -i -- 's/=false/=true/g' .env
     sed -i -- 's/PHPDBG=true/PHPDBG=false/g' .env
@@ -70,7 +74,9 @@ fi
 sed -i -- 's/MYSQL_VERSION=latest/MYSQL_VERSION=8.0/g' .env
 #################
 
+echo  build version is ${BUILD_VERSION}
 cat .env
+
 docker-compose build ${BUILD_SERVICE}
 docker images
 
