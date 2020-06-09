@@ -32,6 +32,10 @@ if [ -n "${PHP_VERSION}" ]; then
         search='pecl install memcached';
         replace='pecl install memcached-2.2.0';
         sed  -i "s/$search/$replace/g" ./php-worker/Dockerfile;
+
+        search='pecl -q install swoole-2.0.10;';
+        insert='apk add linux-headers; \\';
+        sed  -i "/$search/i$insert" ./php-worker/Dockerfile;
     fi
     if [ "${PHP_VERSION}" == "7.3" ]; then
         # V8JS extension does not yet support PHP 7.3.
