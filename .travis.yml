@@ -45,7 +45,9 @@ env:
     # - PHP_VERSION=NA BUILD_SERVICE="ipython-controller manticore"
     # - PHP_VERSION=NA BUILD_SERVICE="aws"
 
-    - PHP_VERSION=NA BUILD_SERVICE="nginx mysql redis"
+    - PHP_VERSION=NA BUILD_SERVICE="nginx"
+    # - PHP_VERSION=NA BUILD_SERVICE="mysql"
+    - PHP_VERSION=NA BUILD_SERVICE="redis"
 
 # Installing a newer Docker version
 before_install:
