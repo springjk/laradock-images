@@ -69,7 +69,7 @@ if [ -n "${PHP_VERSION}" ]; then
 
     # 添加 php ini 配置文件至 php-fpm 镜像内
 
-    search='USER root';
+    search='COPY ./xlaravel.pool.conf /usr/local/etc/php-fpm.d/';
     insert='COPY php${LARADOCK_PHP_VERSION}.ini /usr/local/etc/php/php.ini';
     sed  -i "/$search/i$insert" ./php-fpm/Dockerfile;
 fi
