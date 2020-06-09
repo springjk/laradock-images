@@ -63,22 +63,24 @@ if [ -n "${PHP_VERSION}" ]; then
     # 添加 php ini 配置文件至 php-fpm 镜像内
 
     search='USER root';
-    insert='COPY ./php-fpm/php${LARADOCK_PHP_VERSION}.ini /usr/local/etc/php/php.ini';
+    insert='COPY php${LARADOCK_PHP_VERSION}.ini /usr/local/etc/php/php.ini';
     sed  -i "/$search/i$insert" ./php-fpm/Dockerfile;
-
-
 fi
 
 
-# 锁定 mysql 版本为 mysql 8.0
-sed -i -- 's/MYSQL_VERSION=latest/MYSQL_VERSION=8.0/g' .env
-#################
+if [ -n "${MYSQL_VERSION}" ]; then
+    sed -i -- "s/MYSQL_VERSION=.*/MYSQL_VERSION=${MYSQL_VERSION}/g" .env
+    BUILD_VERSION=${MYSQL_VERSION}
+fi
 
 echo  build version is ${BUILD_VERSION}
 cat .env
 
 docker-compose build ${BUILD_SERVICE}
 docker images
+
+#################
+
 
 # push latest
 docker tag laradock_${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
@@ -91,25 +93,4 @@ if [[ ${BUILD_VERSION} != "latest" && ${BUILD_VERSION} != "NA" ]]; then
     # push build version
     docker tag ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:${BUILD_VERSION}
     docker push ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}
-fi
-
-
-#### Generate the Laradock Documentation site using Hugo
-if [ -n "${HUGO_VERSION}" ]; then
-    HUGO_PACKAGE=hugo_${HUGO_VERSION}_Linux-64bit
-    HUGO_BIN=hugo_${HUGO_VERSION}_linux_amd64
-
-    # Download hugo binary
-    curl -L https://github.com/spf13/hugo/releases/download/v$HUGO_VERSION/$HUGO_PACKAGE.tar.gz | tar xz
-    mkdir -p $HOME/bin
-    mv ./${HUGO_BIN}/${HUGO_BIN} $HOME/bin/hugo
-
-    # Remove existing docs
-    if [ -d "./docs" ]; then
-        rm -r ./docs
-    fi
-
-    # Build docs
-    cd DOCUMENTATION
-    hugo
 fi
