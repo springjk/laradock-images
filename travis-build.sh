@@ -62,6 +62,9 @@ if [ -n "${PHP_VERSION}" ]; then
     sed -i -- 's/PHP_WORKER_INSTALL_FFMPEG=false/PHP_WORKER_INSTALL_FFMPEG=true/g' .env
     sed -i -- 's/WORKSPACE_INSTALL_FFMPEG=false/WORKSPACE_INSTALL_FFMPEG=true/g' .env
 
+    # 开启 redis 扩展
+    sed -i -- 's/PHP_WORKER_INSTALL_REDIS=false/PHP_WORKER_INSTALL_REDIS=true/g' .env
+
     # 开启 swoole 安装 (php-fpm php-worker workspace)
     sed -i -- 's/PHP_FPM_INSTALL_SWOOLE=false/PHP_FPM_INSTALL_SWOOLE=true/g' .env
     sed -i -- 's/PHP_WORKER_INSTALL_SWOOLE=false/PHP_WORKER_INSTALL_SWOOLE=true/g' .env
