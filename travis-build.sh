@@ -33,6 +33,11 @@ if [ -n "${PHP_VERSION}" ]; then
         replace='pecl install memcached-2.2.0';
         sed  -i "s/$search/$replace/g" ./php-worker/Dockerfile;
 
+
+        search='pecl install -o -f redis';
+        replace='pecl install -o -f redis-2.2.8';
+        sed  -i "s/$search/$replace/g" ./php-worker/Dockerfile;
+
         search='pecl -q install swoole-2.0.10;';
         insert='apk add linux-headers; \\';
         sed  -i "/$search/i$insert" ./php-worker/Dockerfile;
