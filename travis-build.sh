@@ -77,10 +77,14 @@ if [ -n "${PHP_VERSION}" ]; then
     sed  -i "/$search/a$insert" ./php-fpm/Dockerfile;
 fi
 
-# 拷贝 nginx 默认配置文件
-search='COPY nginx.conf';
-insert='sites /etc/nginx/sites-available';
-sed  -i "/$search/a$insert" ./nginx/Dockerfile;
+
+if [ "${BUILD_SERVICE}" == "nginx" ]; then
+    # 拷贝 nginx 默认配置文件
+    search='COPY nginx.conf';
+    insert='sites /etc/nginx/sites-available';
+    sed  -i "/$search/a$insert" ./nginx/Dockerfile;
+fi
+
 
 if [ -n "${MYSQL_VERSION}" ]; then
     sed -i -- "s/MYSQL_VERSION=.*/MYSQL_VERSION=${MYSQL_VERSION}/g" .env
