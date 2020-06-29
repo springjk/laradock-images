@@ -81,7 +81,7 @@ fi
 if [ "${BUILD_SERVICE}" == "nginx" ]; then
     # 拷贝 nginx 默认配置文件
     search='COPY nginx.conf';
-    insert='sites /etc/nginx/sites-available';
+    insert='COPY sites /etc/nginx/sites-available';
     sed  -i "/$search/a$insert" ./nginx/Dockerfile;
 fi
 
