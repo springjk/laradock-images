@@ -3,7 +3,7 @@
 #### halt script on error
 set -xe
 
-git clone -b v10.0 https://github.com/laradock/laradock.git
+git clone -b v11.0 https://github.com/laradock/laradock.git
 cd laradock
 
 echo '##### Print docker version'
