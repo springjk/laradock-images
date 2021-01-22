@@ -43,8 +43,8 @@ if [ -n "${PHP_VERSION}" ]; then
         sed  -i "/$search/i$insert" ./php-worker/Dockerfile;
     fi
     if [ "${PHP_VERSION}" == "7.1" ]; then
-        search='$(php -r "echo PHP_MINOR_VERSION;") = "0"';
-        replace='$(php -r "echo PHP_MINOR_VERSION;") = "0" || $(php -r "echo PHP_MINOR_VERSION;") = "1"';
+        search='pecl install swoole; ';
+        replace='pecl install swoole-2.2.0;';
         sed  -i "s/$search/$replace/g" ./php-fpm/Dockerfile;
         sed  -i "s/$search/$replace/g" ./php-worker/Dockerfile;
         sed  -i "s/$search/$replace/g" ./workspace/Dockerfile;
