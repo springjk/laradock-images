@@ -42,6 +42,13 @@ if [ -n "${PHP_VERSION}" ]; then
         insert='apk add linux-headers; \\';
         sed  -i "/$search/i$insert" ./php-worker/Dockerfile;
     fi
+    if [ "${PHP_VERSION}" == "7.1" ]; then
+        search='$(php -r "echo PHP_MINOR_VERSION;") = "0"';
+        replace='$(php -r "echo PHP_MINOR_VERSION;") = "0" || $(php -r "echo PHP_MINOR_VERSION;") = "1"';
+        sed  -i "s/$search/$replace/g" ./php-fpm/Dockerfile;
+        sed  -i "s/$search/$replace/g" ./php-worker/Dockerfile;
+        sed  -i "s/$search/$replace/g" ./workspace/Dockerfile;
+    fi
     if [ "${PHP_VERSION}" == "7.3" ]; then
         # V8JS extension does not yet support PHP 7.3.
         sed -i -- 's/WORKSPACE_INSTALL_V8JS=true/WORKSPACE_INSTALL_V8JS=false/g' .env
