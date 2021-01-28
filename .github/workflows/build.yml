@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         php_version: ["7.0", "7.1", "7.2", "7.3", "7.4"]
-        service: ["php-fpm"]
+        service: ["php-fpm", "php-worker", "workspace"]
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
