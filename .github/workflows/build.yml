@@ -15,4 +15,6 @@ jobs:
       env:
         PHP_VERSION: ${{ matrix.php_version }}
         BUILD_SERVICE: ${{ matrix.service }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: sh build-image.sh
