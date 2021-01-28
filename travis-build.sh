@@ -125,5 +125,5 @@ docker push ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}
 if [[ ${BUILD_VERSION} != "latest" && ${BUILD_VERSION} != "NA" ]]; then
     # push build version
     docker tag ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:${BUILD_VERSION}
-    docker push ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}
+    docker push ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:${BUILD_VERSION}
 fi
