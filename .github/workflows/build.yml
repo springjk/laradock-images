@@ -3,17 +3,47 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-php:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php_version: ["7.1", "7.2", "7.3", "7.4"]
-        service: [php-fpm]
+        service: ["php-fpm"]
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       env:
         PHP_VERSION: ${{ matrix.php_version }}
+        BUILD_SERVICE: ${{ matrix.service }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: bash build-image.sh
+  build-mysql:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: ["5.7", "8.0"]
+        service: ["mysql"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      env:
+        PHP_VERSION: "NA"
+        MYSQL_VERSION: ${{ matrix.mysql_version }}
+        BUILD_SERVICE: ${{ matrix.service }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: bash build-image.sh
+  build-redis:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ["redis"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      env:
+        PHP_VERSION: "NA"
         BUILD_SERVICE: ${{ matrix.service }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
