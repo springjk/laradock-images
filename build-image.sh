@@ -9,6 +9,8 @@ cd laradock
 echo '##### Print docker version'
 docker --version
 
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 echo '##### Print environment'
 env | sort
 
