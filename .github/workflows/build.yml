@@ -8,12 +8,11 @@ jobs:
     strategy:
       matrix:
         php_version: ["7.1", "7.2", "7.3", "7.4"]
-        service: [php-fpm, mysql]
+        service: [mysql]
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       env:
         PHP_VERSION: ${{ matrix.php_version }}
         BUILD_SERVICE: ${{ matrix.service }}
-      run: |
-        sh travis-build.sh
+      run: sh build-image.sh
