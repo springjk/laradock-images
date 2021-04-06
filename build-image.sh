@@ -68,6 +68,10 @@ if [ -n "${PHP_VERSION}" ]; then
         replace='docker-php-ext-configure gd --with-freetype --with-jpeg ';
         sed -i "s|$search|$replace|g" ./php-worker/Dockerfile
 
+        # https://github.com/docker-library/php/issues/225#issuecomment-691989156
+        search='apk add --update --no-cache freetype-dev libjpeg-turbo-dev jpeg-dev libpng-dev;';
+        replace='apk add --no-cache freetype freetype-dev libpng libpng-dev libjpeg-turbo libjpeg-turbo-dev;';
+        sed -i "s|$search|$replace|g" ./php-worker/Dockerfile
     fi
 
     # sed -i -- 's/CHANGE_SOURCE=true/CHANGE_SOURCE=false/g' .env
