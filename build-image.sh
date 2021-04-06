@@ -142,7 +142,7 @@ fi
 
 
 # push to aliyun docker hub
-echo "$ALIYUN_DOCKER_PASSWORD" | docker login -u "$ALIYUN_DOCKER_USERNAME" --password-stdin
+echo "$ALI_DOCKER_PASSWORD" | docker login -u "$ALI_DOCKER_USERNAME" --password-stdin
 
 docker tag laradock_${BUILD_SERVICE}:latest registry.cn-hangzhou.aliyuncs.com/${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
 
