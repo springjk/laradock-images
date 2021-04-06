@@ -9,8 +9,6 @@ cd laradock
 echo '##### Print docker version'
 docker --version
 
-echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
 echo '##### Print environment'
 env | sort
 
@@ -125,12 +123,12 @@ echo  build version is ${BUILD_VERSION}
 cat .env
 
 docker-compose build ${BUILD_SERVICE}
-docker images
-
 #################
 
 
-# push latest
+# push to docker hub
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 docker tag laradock_${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
 
 docker images
@@ -141,4 +139,20 @@ if [[ ${BUILD_VERSION} != "latest" && ${BUILD_VERSION} != "NA" ]]; then
     # push build version
     docker tag ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:${BUILD_VERSION}
     docker push ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:${BUILD_VERSION}
+fi
+
+
+# push to aliyun docker hub
+echo "$ALIYUN_DOCKER_PASSWORD" | docker login -u "$ALIYUN_DOCKER_USERNAME" --password-stdin
+
+docker tag laradock_${BUILD_SERVICE}:latest registry.cn-hangzhou.aliyuncs.com/${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
+
+docker images
+
+docker push registry.cn-hangzhou.aliyuncs.com/${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}
+
+if [[ ${BUILD_VERSION} != "latest" && ${BUILD_VERSION} != "NA" ]]; then
+    # push build version
+    docker tag ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest registry.cn-hangzhou.aliyuncs.com/${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:${BUILD_VERSION}
+    docker push registry.cn-hangzhou.aliyuncs.com/${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:${BUILD_VERSION}
 fi
