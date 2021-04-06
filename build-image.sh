@@ -126,9 +126,6 @@ docker-compose build ${BUILD_SERVICE}
 #####################################
 
 # push to docker hub
-echo "$DOCKER_USERNAME"
-echo "$DOCKER_PASSWORD"
-
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 docker tag laradock_${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
@@ -145,7 +142,7 @@ fi
 
 
 # push to aliyun docker hub
-echo "$ALIYUN_DOCKER_PASSWORD" | docker login -u "$ALIYUN_DOCKER_USERNAME" --password-stdin
+echo "$ALIYUN_DOCKER_PASSWORD" | docker login -u "$ALIYUN_DOCKER_USERNAME" --password-stdin registry.cn-hangzhou.aliyuncs.com
 
 docker tag laradock_${BUILD_SERVICE}:latest registry.cn-hangzhou.aliyuncs.com/${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
 
