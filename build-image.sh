@@ -66,9 +66,11 @@ if [ -n "${PHP_VERSION}" ]; then
     fi
 
     if [ "${PHP_VERSION}" == "7.4" ]; then
-        sed -i 's|docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/|docker-php-ext-configure gd --with-freetype --with-jpeg|g' ./php-worker/Dockerfile
-    fi
+        search='docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/ ';
+        replace='docker-php-ext-configure gd --with-freetype --with-jpeg ';
+        sed -i "s|$search|$replace|g" ./php-worker/Dockerfile
 
+    fi
 
     # sed -i -- 's/CHANGE_SOURCE=true/CHANGE_SOURCE=false/g' .env
 
