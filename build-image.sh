@@ -125,7 +125,6 @@ cat .env
 docker-compose build ${BUILD_SERVICE}
 #################
 
-
 # push to docker hub
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
