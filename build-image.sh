@@ -126,6 +126,9 @@ docker-compose build ${BUILD_SERVICE}
 #####################################
 
 # push to docker hub
+echo "$DOCKER_USERNAME"
+echo "$DOCKER_PASSWORD"
+
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 docker tag laradock_${BUILD_SERVICE}:latest ${DOCKER_USERNAME}/laradock-${BUILD_SERVICE}:latest
