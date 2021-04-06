@@ -87,6 +87,11 @@ if [ -n "${PHP_VERSION}" ]; then
     sed -i -- 's/PHP_WORKER_INSTALL_SWOOLE=false/PHP_WORKER_INSTALL_SWOOLE=true/g' .env
     sed -i -- 's/WORKSPACE_INSTALL_SWOOLE=false/WORKSPACE_INSTALL_SWOOLE=true/g' .env
 
+    # 开启 GD 和 ImageMagic
+    sed -i -- 's/PHP_WORKER_INSTALL_GD=false/PHP_WORKER_INSTALL_GD=true/g' .env
+    sed -i -- 's/PHP_WORKER_INSTALL_IMAGEMAGICK=false/PHP_WORKER_INSTALL_IMAGEMAGICK=true/g' .env
+
+
     # 添加 php ini 配置文件至 php-fpm 镜像内
 
     search='xlaravel.pool.conf';
