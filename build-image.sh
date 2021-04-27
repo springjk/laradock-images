@@ -14,7 +14,7 @@ echo '##### Print environment'
 env | sort
 
 BUILD_VERSION=latest
-cp env-example .env
+cp .env.example .env
 
 #### Build the Docker Images
 if [ -n "${PHP_VERSION}" ]; then
