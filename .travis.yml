@@ -49,6 +49,7 @@ env:
     - PHP_VERSION=NA MYSQL_VERSION=5.7 BUILD_SERVICE="mysql"
     - PHP_VERSION=NA MYSQL_VERSION=8.0 BUILD_SERVICE="mysql"
     - PHP_VERSION=NA BUILD_SERVICE="redis"
+    - PHP_VERSION=NA BUILD_SERVICE="elasticsearch"
 
 # Installing a newer Docker version
 before_install:
