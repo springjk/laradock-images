@@ -3,9 +3,11 @@
 #### halt script on error
 set -xe
 
-git clone -b v12.1 https://github.com/laradock/laradock.git
-# git clone  https://github.com/laradock/laradock.git
+#git clone -b v12.1 https://github.com/laradock/laradock.git
+git clone  https://github.com/laradock/laradock.git
 cd laradock
+# switch version to Commits on Apr 26, 2022
+git checkout a2dd97674f76e114717e9ff1e98f3912d053c96d
 
 echo '##### Print docker version'
 docker --version
