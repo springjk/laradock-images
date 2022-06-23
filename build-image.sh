@@ -108,6 +108,11 @@ if [ -n "${PHP_VERSION}" ]; then
     sed -i -- 's/PHP_FPM_INSTALL_AMQP=false/PHP_FPM_INSTALL_AMQP=true/g' .env
     sed -i -- 's/WORKSPACE_INSTALL_AMQP=false/WORKSPACE_INSTALL_AMQP=true/g' .env
 
+    # 开启 MongoDB 支持
+    sed -i -- 's/WORKSPACE_INSTALL_MONGO=false/WORKSPACE_INSTALL_MONGO=true/g' .env
+    sed -i -- 's/PHP_FPM_INSTALL_MONGO=false/PHP_FPM_INSTALL_MONGO=true/g' .env
+    sed -i -- 's/PHP_WORKER_INSTALL_MONGO=false/PHP_WORKER_INSTALL_MONGO=true/g' .env
+
 
     # 添加 php ini 配置文件至 php-fpm 镜像内
 
