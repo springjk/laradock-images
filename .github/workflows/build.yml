@@ -67,3 +67,18 @@ jobs:
         ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
         ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
       run: bash build-image.sh
+  build-mongoDB:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ["mongoDB"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        env:
+          BUILD_SERVICE: ${{ matrix.service }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
+          ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
+        run: bash build-image.sh
