@@ -47,7 +47,7 @@ if [ -n "${PHP_VERSION}" ]; then
         sed  -i "/$search/i$insert" ./php-worker/Dockerfile;
     fi
 
-    if [ "${PHP_VERSION}" == "7.3" ]; then
+    if [ "${PHP_VERSION}" == "7.2"] || ["${PHP_VERSION}" == "7.3"] || ["${PHP_VERSION}" == "7.4"]; then
         # V8JS extension does not yet support PHP 7.3.
         sed -i -- 's/WORKSPACE_INSTALL_V8JS=true/WORKSPACE_INSTALL_V8JS=false/g' .env
         # This ssh2 extension does not yet support PHP 7.3.
@@ -56,6 +56,15 @@ if [ -n "${PHP_VERSION}" ]; then
         sed -i -- 's/PHP_FPM_INSTALL_XDEBUG=true/PHP_FPM_INSTALL_XDEBUG=false/g' .env
         # memcached extension does not yet support PHP 7.3.
         sed -i -- 's/PHP_FPM_INSTALL_MEMCACHED=true/PHP_FPM_INSTALL_MEMCACHED=false/g' .env
+
+        search='pecl -q install swoole;';
+        replace='pecl -q install swoole-4.8.9;';
+        sed -i "s/$search/$replace/g" ./workspace/Dockerfile;
+
+        search='pecl install swoole;';
+        replace='pecl install swoole-4.8.9;';
+        sed -i "s/$search/$replace/g" ./php-fpm/Dockerfile;
+        sed -i "s/$search/$replace/g" ./php-worker/Dockerfile;
     fi
 
     if [ "${PHP_VERSION}" == "8.0" ]; then
