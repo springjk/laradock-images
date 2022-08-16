@@ -66,12 +66,11 @@ if [ -n "${PHP_VERSION}" ]; then
         sed -i -- 's/PHP_FPM_INSTALL_MEMCACHED=true/PHP_FPM_INSTALL_MEMCACHED=false/g' .env
     fi
 
-    if [ "${PHP_VERSION}"  == "8.0" ]; then
-        sed -i "s/pecl -q install swoole/pecl -q install --configureoptions 'enable-sockets=no enable-openssl=yes enable-http2=yes enable-mysqlnd=yes enable-swoole-json=no enable-swoole-curl=yes enable-cares=yes' swoole-4.8.9" ./workspace/Dockerfile
-        sed -i "s/pecl install swoole;/pecl install --configureoptions 'enable-sockets=no enable-openssl=yes enable-http2=yes enable-mysqlnd=yes enable-swoole-json=no enable-swoole-curl=yes enable-cares=yes' swoole-4.8.9/g" ./php-fpm/Dockerfile;
-        sed -i "s/pecl install swoole;/pecl install --configureoptions 'enable-sockets=no enable-openssl=yes enable-http2=yes enable-mysqlnd=yes enable-swoole-json=no enable-swoole-curl=yes enable-cares=yes' swoole-4.8.9/g" ./php-worker/Dockerfile;
+    if [ "${PHP_VERSION}" == "8.0" ]; then
+        sed -i 's/pecl -q install swoole;/printf "no\nyes\nyes\nyes\nyes\nyes\nyes" | pecl install swoole-4.8.9;/g' ./workspace/Dockerfile
+        sed -i 's/pecl install swoole;/printf "no\nyes\nyes\nyes\nyes\nyes\nyes" | pecl install swoole-4.8.9;/g' ./php-fpm/Dockerfile;
+        sed -i 's/pecl install swoole;/printf "no\nyes\nyes\nyes\nyes\nyes\nyes" | pecl install swoole-4.8.9;/g' ./php-worker/Dockerfile;
     fi
-
     # if [ "${PHP_VERSION}" == "7.4" ]; then
     #     search='docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/ ';
     #     replace='docker-php-ext-configure gd --with-freetype --with-jpeg ';
