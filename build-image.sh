@@ -47,14 +47,6 @@ if [ -n "${PHP_VERSION}" ]; then
         sed  -i "/$search/i$insert" ./php-worker/Dockerfile;
     fi
 
-    if [ "${PHP_VERSION}" == "7.1" ]; then
-        search='pecl install swoole; ';
-        replace='pecl install swoole-2.2.0;';
-        sed  -i "s/$search/$replace/g" ./php-fpm/Dockerfile;
-        sed  -i "s/$search/$replace/g" ./php-worker/Dockerfile;
-        sed  -i "s/$search/$replace/g" ./workspace/Dockerfile;
-    fi
-
     if [ "${PHP_VERSION}" == "7.3" ]; then
         # V8JS extension does not yet support PHP 7.3.
         sed -i -- 's/WORKSPACE_INSTALL_V8JS=true/WORKSPACE_INSTALL_V8JS=false/g' .env
@@ -67,9 +59,9 @@ if [ -n "${PHP_VERSION}" ]; then
     fi
 
     if [ "${PHP_VERSION}" == "8.0" ]; then
-        sed -i 's/pecl -q install swoole;/printf "no\nyes\nyes\nyes\nyes\nyes\nyes" | pecl install swoole-4.8.9;/g' ./workspace/Dockerfile
-        sed -i 's/pecl install swoole;/printf "no\nyes\nyes\nyes\nyes\nyes\nyes" | pecl install swoole-4.8.9;/g' ./php-fpm/Dockerfile;
-        sed -i 's/pecl install swoole;/printf "no\nyes\nyes\nyes\nyes\nyes\nyes" | pecl install swoole-4.8.9;/g' ./php-worker/Dockerfile;
+        sed -i 's/pecl -q install swoole;/ yes yes | pecl install swoole-4.8.9;/g' ./workspace/Dockerfile
+        sed -i 's/pecl install swoole;/yes yes | pecl install swoole-4.8.9;/g' ./php-fpm/Dockerfile;
+        sed -i 's/pecl install swoole;/yes yes | pecl install swoole-4.8.9;/g' ./php-worker/Dockerfile;
     fi
     # if [ "${PHP_VERSION}" == "7.4" ]; then
     #     search='docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/ ';
