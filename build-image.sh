@@ -68,7 +68,7 @@ if [ -n "${PHP_VERSION}" ]; then
     fi
 
     if [ "${PHP_VERSION}" == "8.0" ]; then
-        sed -i 's/pecl -q install swoole;/ yes yes | pecl install swoole-4.8.9;/g' ./workspace/Dockerfile
+        sed -i 's/pecl -q install swoole;/ yes yes | pecl install swoole-4.8.9;/g' ./workspace/Dockerfile;
         sed -i 's/pecl install swoole;/yes yes | pecl install swoole-4.8.9;/g' ./php-fpm/Dockerfile;
         sed -i 's/pecl install swoole;/yes yes | pecl install swoole-4.8.9;/g' ./php-worker/Dockerfile;
     fi
