@@ -18,6 +18,10 @@ env | sort
 BUILD_VERSION=latest
 cp .env.example .env
 
+if [[ `uname` == 'Darwin' ]]; then
+    alias sed=gsed;
+fi
+
 #### Build the Docker Images
 if [ -n "${PHP_VERSION}" ]; then
     BUILD_VERSION=${PHP_VERSION}
@@ -68,9 +72,13 @@ if [ -n "${PHP_VERSION}" ]; then
     fi
 
     if [ "${PHP_VERSION}" == "8.0" ]; then
-        sed -i 's/pecl -q install swoole;/ yes yes | pecl install swoole-4.8.9;/g' ./workspace/Dockerfile;
-        sed -i 's/pecl install swoole;/yes yes | pecl install swoole-4.8.9;/g' ./php-fpm/Dockerfile;
-        sed -i 's/pecl install swoole;/yes yes | pecl install swoole-4.8.9;/g' ./php-worker/Dockerfile;
+        search='pecl -q install swoole;';
+        replace='yes yes | pecl install swoole-4.8.9;';
+        sed -i "s/$search/$replace/g" ./workspace/Dockerfile;
+        search='pecl install swoole;';
+        replace='yes yes | pecl install swoole-4.8.9;';
+        sed -i "s/$search/$replace/g" ./php-fpm/Dockerfile;
+        sed -i "s/$search/$replace/g" ./php-worker/Dockerfile;
     fi
     # if [ "${PHP_VERSION}" == "7.4" ]; then
     #     search='docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/ ';
