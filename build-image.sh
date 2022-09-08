@@ -73,12 +73,8 @@ if [ -n "${PHP_VERSION}" ]; then
 
     if [ "${PHP_VERSION}" == "8.0" ]; then
         search='pecl -q install swoole;';
-        replace='yes yes | pecl install swoole-4.8.9;';
-        sed -i "s/$search/$replace/g" ./workspace/Dockerfile;
-        search='pecl install swoole;';
-        replace='yes yes | pecl install swoole-4.8.9;';
-        sed -i "s/$search/$replace/g" ./php-fpm/Dockerfile;
-        sed -i "s/$search/$replace/g" ./php-worker/Dockerfile;
+        replace="yes yes | pecl install swoole-4.8.10;";
+        sed -i "s/^$search/^$replace/g" ./workspace/Dockerfile;
     fi
     # if [ "${PHP_VERSION}" == "7.4" ]; then
     #     search='docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/ ';
