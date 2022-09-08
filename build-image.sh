@@ -73,7 +73,7 @@ if [ -n "${PHP_VERSION}" ]; then
 
     if [ "${PHP_VERSION}" == "8.0" ]; then
         search='pecl -q install swoole;';
-        replace="pecl install --configureoptions 'enable-sockets=no enable-openssl=yes enable-http2=no enable-mysqlnd=no enable-swoole-json=no enable-swoole-curl=no enable-cares=no' swoole-4.8.10;";
+        replace="yes yes | pecl install swoole-4.8.10;";
         sed -i "s/^$search/^$replace/g" ./workspace/Dockerfile;
     fi
     # if [ "${PHP_VERSION}" == "7.4" ]; then
