@@ -37,11 +37,11 @@ jobs:
         ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
         ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
       run: bash build-image.sh
-  build-redis:
+  build-other:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: ["redis"]
+        service: ["redis", "mongo", "nginx", "elasticsearch"]
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
@@ -52,48 +52,3 @@ jobs:
         ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
         ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
       run: bash build-image.sh
-  build-elasticsearch:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: ["elasticsearch"]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      env:
-        BUILD_SERVICE: ${{ matrix.service }}
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
-        ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-      run: bash build-image.sh
-  build-mongoDB:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: ["mongo"]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image
-        env:
-          BUILD_SERVICE: ${{ matrix.service }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
-          ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-        run: bash build-image.sh
-  build-nginx:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: ["nginx"]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image
-        env:
-          BUILD_SERVICE: ${{ matrix.service }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
-          ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-        run: bash build-image.sh
