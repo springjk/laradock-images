@@ -29,6 +29,9 @@ if [ -n "${PHP_VERSION}" ]; then
     sed -i -- "s/PHP_VERSION=.*/PHP_VERSION=${PHP_VERSION}/g" .env
     # sed -i -- 's/=false/=true/g' .env
     sed -i -- 's/PHPDBG=true/PHPDBG=false/g' .env
+    
+    sed -i -- 's/WORKSPACE_INSTALL_NODE=true/WORKSPACE_INSTALL_NODE=false/g' .env
+    
 
     if [ "${PHP_VERSION}" == "5.6" ]; then
         # Aerospike C Client SDK 4.0.7, Debian 9.6 is not supported
