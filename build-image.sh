@@ -38,7 +38,7 @@ if [ -n "${PHP_VERSION}" ]; then
         # https://github.com/aerospike/aerospike-client-php5/issues/145
         sed -i -- 's/PHP_FPM_INSTALL_AEROSPIKE=true/PHP_FPM_INSTALL_AEROSPIKE=false/g' .env
 
-        sed -i -- 's/WORKSPACE_INSTALL_AST=true/WORKSPACE_INSTALL_AST=false/g' .env
+        sed -i 's/WORKSPACE_NODE_VERSION=node/WORKSPACE_NODE_VERSION=19.0/g' .env
 
         search='pecl install memcached';
         replace='pecl install memcached-2.2.0';
