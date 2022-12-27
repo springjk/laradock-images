@@ -6,8 +6,8 @@ set -xe
 #git clone -b v12.1 https://github.com/laradock/laradock.git
 git clone  https://github.com/laradock/laradock.git
 cd laradock
-# switch version to Commits on Apr 26, 2022
-git checkout a2dd97674f76e114717e9ff1e98f3912d053c96d
+# switch version to Commits on Dec 22, 2022
+git checkout 6c8cb6dd85eb1fcad6f7dce3e9d6c6a29c6e3ed8
 
 echo '##### Print docker version'
 docker --version
