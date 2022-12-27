@@ -29,30 +29,6 @@ if [ -n "${PHP_VERSION}" ]; then
     sed -i -- "s/PHP_VERSION=.*/PHP_VERSION=${PHP_VERSION}/g" .env
     # sed -i -- 's/=false/=true/g' .env
     sed -i -- 's/PHPDBG=true/PHPDBG=false/g' .env
-    
-    sed -i -- 's/WORKSPACE_INSTALL_NODE=true/WORKSPACE_INSTALL_NODE=false/g' .env
-    
-
-    if [ "${PHP_VERSION}" == "5.6" ]; then
-        # Aerospike C Client SDK 4.0.7, Debian 9.6 is not supported
-        # https://github.com/aerospike/aerospike-client-php5/issues/145
-        sed -i -- 's/PHP_FPM_INSTALL_AEROSPIKE=true/PHP_FPM_INSTALL_AEROSPIKE=false/g' .env
-
-        sed -i 's/WORKSPACE_NODE_VERSION=node/WORKSPACE_NODE_VERSION=19.0/g' .env
-
-        search='pecl install memcached';
-        replace='pecl install memcached-2.2.0';
-        sed  -i "s/$search/$replace/g" ./php-worker/Dockerfile;
-
-
-        search='pecl install -o -f redis';
-        replace='pecl install -o -f redis-2.2.8';
-        sed  -i "s/$search/$replace/g" ./php-worker/Dockerfile;
-
-        search='pecl -q install swoole-2.0.10;';
-        insert='apk add linux-headers; \\';
-        sed  -i "/$search/i$insert" ./php-worker/Dockerfile;
-    fi
 
     if [[ "${PHP_VERSION}" == "7.2" || "${PHP_VERSION}" == "7.3" || "${PHP_VERSION}" == "7.4" ]]; then
         # V8JS extension does not yet support PHP 7.3.
@@ -79,6 +55,7 @@ if [ -n "${PHP_VERSION}" ]; then
         replace="yes yes | pecl install swoole-4.8.10;";
         sed -i "s/^$search/^$replace/g" ./workspace/Dockerfile;
     fi
+    
     # if [ "${PHP_VERSION}" == "7.4" ]; then
     #     search='docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/ ';
     #     replace='docker-php-ext-configure gd --with-freetype --with-jpeg ';
