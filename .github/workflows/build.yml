@@ -5,7 +5,10 @@ on: [push, pull_request]
 jobs:
   build-php:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     strategy:
+      fail-fast: false
+      max-parallel: 3  # 限制并发数量，避免资源争抢
       matrix:
         php_version: ["7.4", "8.0", "8.1", "8.2", "8.3"]
         service: ["php-fpm", "php-worker", "workspace"]
@@ -38,6 +41,27 @@ jobs:
         
         echo "=== 环境检查完成 ==="
     
+    - name: Docker optimization
+      run: |
+        echo "=== Docker优化配置 ==="
+        
+        # 清理Docker缓存
+        docker system prune -f || true
+        
+        # 预热Docker守护进程
+        echo "预热Docker守护进程..."
+        docker run --rm hello-world
+        
+        # 显示Docker存储信息
+        echo "Docker存储信息:"
+        docker system df
+        
+        # 显示当前运行的容器
+        echo "当前容器:"
+        docker ps -a
+        
+        echo "=== Docker优化完成 ==="
+    
     - name: Build the Docker image
       env:
         PHP_VERSION: ${{ matrix.php_version }}
@@ -51,7 +75,9 @@ jobs:
         ./build-image.sh
   build-mysql:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
+      fail-fast: false
       matrix:
         mysql_version: ["5.7", "8.0"]
         service: ["mysql"]
@@ -82,7 +108,10 @@ jobs:
       run: ./build-image.sh
   build-other:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
+      fail-fast: false
+      max-parallel: 2  # 限制并发数量
       matrix:
         service: ["redis", "mongo", "nginx", "elasticsearch"]
     steps:

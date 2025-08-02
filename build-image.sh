@@ -148,14 +148,54 @@ cat .env
 
 # 检查并使用正确的docker compose命令
 echo "=== 开始构建Docker镜像 ==="
-if docker compose version > /dev/null 2>&1; then
-    echo "使用 docker compose (plugin) 构建镜像..."
-    docker compose build ${BUILD_SERVICE}
-elif docker-compose --version > /dev/null 2>&1; then
-    echo "使用 docker-compose (standalone) 构建镜像..."
-    docker-compose build ${BUILD_SERVICE}
+
+# 构建重试函数
+build_with_retry() {
+    local max_attempts=3
+    local attempt=1
+    
+    while [ $attempt -le $max_attempts ]; do
+        echo "构建尝试 $attempt/$max_attempts..."
+        
+        if docker compose version > /dev/null 2>&1; then
+            echo "使用 docker compose (plugin) 构建镜像..."
+            if timeout 3600 docker compose build --no-cache ${BUILD_SERVICE}; then
+                echo "✅ 构建成功！"
+                return 0
+            fi
+        elif docker-compose --version > /dev/null 2>&1; then
+            echo "使用 docker-compose (standalone) 构建镜像..."
+            if timeout 3600 docker-compose build --no-cache ${BUILD_SERVICE}; then
+                echo "✅ 构建成功！"
+                return 0
+            fi
+        else
+            echo "❌ 错误: 找不到 docker compose 或 docker-compose 命令"
+            exit 1
+        fi
+        
+        if [ $attempt -lt $max_attempts ]; then
+            echo "⚠️  构建失败，等待30秒后重试..."
+            sleep 30
+            
+            # 清理Docker缓存
+            echo "清理Docker构建缓存..."
+            docker builder prune -f || true
+            docker system prune -f || true
+        fi
+        
+        attempt=$((attempt + 1))
+    done
+    
+    echo "❌ 所有构建尝试都失败了"
+    return 1
+}
+
+# 执行构建
+if build_with_retry; then
+    echo "🎉 Docker镜像构建完成！"
 else
-    echo "❌ 错误: 找不到 docker compose 或 docker-compose 命令"
+    echo "💥 Docker镜像构建失败！"
     exit 1
 fi
 #####################################
