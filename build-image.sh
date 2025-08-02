@@ -18,8 +18,15 @@ env | sort
 BUILD_VERSION=latest
 cp .env.example .env
 
+# 检查sed命令兼容性
 if [[ `uname` == 'Darwin' ]]; then
-    alias sed=gsed;
+    # macOS使用gsed（如果安装了的话）
+    if command -v gsed > /dev/null 2>&1; then
+        alias sed=gsed;
+    fi
+elif [[ `uname` == 'Linux' ]]; then
+    # Linux环境使用默认sed
+    echo "Linux环境，使用系统自带sed"
 fi
 
 #### Build the Docker Images

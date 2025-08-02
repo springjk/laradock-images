@@ -10,7 +10,25 @@ jobs:
         php_version: ["7.4", "8.0", "8.1", "8.2", "8.3"]
         service: ["php-fpm", "php-worker", "workspace"]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+    - name: Setup environment
+      run: |
+        # 检查必要的命令
+        echo "=== 检查环境 ==="
+        docker --version
+        docker-compose --version
+        git --version
+        
+        # 设置Git配置优化大仓库克隆
+        git config --global http.postBuffer 524288000
+        git config --global http.lowSpeedLimit 1000
+        git config --global http.lowSpeedTime 300
+        
+        # 给脚本添加执行权限
+        chmod +x build-image.sh
+        
+        echo "=== 环境检查完成 ==="
+    
     - name: Build the Docker image
       env:
         PHP_VERSION: ${{ matrix.php_version }}
@@ -19,7 +37,9 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
         ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-      run: bash build-image.sh
+      run: |
+        echo "开始构建 PHP ${{ matrix.php_version }} - ${{ matrix.service }}"
+        ./build-image.sh
   build-mysql:
     runs-on: ubuntu-latest
     strategy:
@@ -27,7 +47,11 @@ jobs:
         mysql_version: ["5.7", "8.0"]
         service: ["mysql"]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+    - name: Setup environment
+      run: |
+        git config --global http.postBuffer 524288000
+        chmod +x build-image.sh
     - name: Build the Docker image
       env:
         MYSQL_VERSION: ${{ matrix.mysql_version }}
@@ -36,14 +60,18 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
         ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-      run: bash build-image.sh
+      run: ./build-image.sh
   build-other:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         service: ["redis", "mongo", "nginx", "elasticsearch"]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+    - name: Setup environment
+      run: |
+        git config --global http.postBuffer 524288000
+        chmod +x build-image.sh
     - name: Build the Docker image
       env:
         BUILD_SERVICE: ${{ matrix.service }}
@@ -51,4 +79,4 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         ALIYUN_DOCKER_USERNAME: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
         ALIYUN_DOCKER_PASSWORD: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-      run: bash build-image.sh
+      run: ./build-image.sh
