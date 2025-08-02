@@ -146,7 +146,18 @@ fi
 echo  build version is ${BUILD_VERSION}
 cat .env
 
-docker-compose build ${BUILD_SERVICE}
+# 检查并使用正确的docker compose命令
+echo "=== 开始构建Docker镜像 ==="
+if docker compose version > /dev/null 2>&1; then
+    echo "使用 docker compose (plugin) 构建镜像..."
+    docker compose build ${BUILD_SERVICE}
+elif docker-compose --version > /dev/null 2>&1; then
+    echo "使用 docker-compose (standalone) 构建镜像..."
+    docker-compose build ${BUILD_SERVICE}
+else
+    echo "❌ 错误: 找不到 docker compose 或 docker-compose 命令"
+    exit 1
+fi
 #####################################
 
 # push to docker hub

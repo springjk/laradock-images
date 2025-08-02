@@ -16,7 +16,16 @@ jobs:
         # 检查必要的命令
         echo "=== 检查环境 ==="
         docker --version
-        docker-compose --version
+        
+        # 检查docker compose命令（新版本）
+        if docker compose version > /dev/null 2>&1; then
+          echo "Docker Compose (plugin): $(docker compose version)"
+        elif docker-compose --version > /dev/null 2>&1; then
+          echo "Docker Compose (standalone): $(docker-compose --version)"
+        else
+          echo "⚠️  Neither 'docker compose' nor 'docker-compose' found"
+        fi
+        
         git --version
         
         # 设置Git配置优化大仓库克隆
@@ -50,6 +59,16 @@ jobs:
     - uses: actions/checkout@v4
     - name: Setup environment
       run: |
+        echo "=== 检查环境 (MySQL构建) ==="
+        docker --version
+        
+        # 检查docker compose命令
+        if docker compose version > /dev/null 2>&1; then
+          echo "Docker Compose (plugin): $(docker compose version)"
+        elif docker-compose --version > /dev/null 2>&1; then
+          echo "Docker Compose (standalone): $(docker-compose --version)"
+        fi
+        
         git config --global http.postBuffer 524288000
         chmod +x build-image.sh
     - name: Build the Docker image
@@ -70,6 +89,16 @@ jobs:
     - uses: actions/checkout@v4
     - name: Setup environment
       run: |
+        echo "=== 检查环境 (其他服务构建) ==="
+        docker --version
+        
+        # 检查docker compose命令
+        if docker compose version > /dev/null 2>&1; then
+          echo "Docker Compose (plugin): $(docker compose version)"
+        elif docker-compose --version > /dev/null 2>&1; then
+          echo "Docker Compose (standalone): $(docker-compose --version)"
+        fi
+        
         git config --global http.postBuffer 524288000
         chmod +x build-image.sh
     - name: Build the Docker image
